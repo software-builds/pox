@@ -14,7 +14,7 @@ code:
 
 div:
     {x}.&&.HEADER.{0, "headingText"}:
-        h3.{"lustig"}
+        h3.{_"lustig"}
     /HEADER
     --
     {logs}.map[item -> (

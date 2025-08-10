@@ -7,17 +7,25 @@ template.childs{
 code:
     clickCount.@state(defaultCount)
         .set: it.inc
-        .effect
-        .load
     --
+    menu.@state([
+        items: [
+            {
+                text: '',
+                link: ''
+            }
+        ]
+    ]).load('menu')
 /code
 
 effect:
-    http{"https://xx:24344/data", (req, res)}
-        .state('data')
-        .error(res::error)
-        .async
-    --
+    menu:
+        http{"https://xx:24344/menu", (req, res)}
+            .state(menu)
+            .error(res::error)
+            .async
+        --
+    /menu
 /effect
 
 /render:
@@ -28,7 +36,11 @@ effect:
         --
         nav:
             ul:
-                {menu}.map[item -> li.{item::text}]
+                {menu}.map[item ->
+                    li:
+                        a.{item::text}.@link(item::link)
+                    /li
+                ]
             /ul
         /nav
         --

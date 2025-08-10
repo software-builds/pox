@@ -1,0 +1,44 @@
+@name(LOGIN)
+template:
+
+code:
+    loginState.@state([
+        username: '',
+        passwort: ''
+    ])
+/code
+
+effect:
+    login:
+        http{"https://xx:24344/login", (req, res)}
+            .post
+            .json
+            .form(loginState)
+            .error(res::error)
+            .async
+        --
+    /login
+/effect
+
+/render:
+    form.@onSubmit(login):
+        h1.{headingText}.@class('test')
+        --
+        ->loginState
+            input
+                .@name('username')
+                .@placeholder(_'Benutzername')
+                .@onChange(.username)
+            --
+            input
+                .@name('password')
+                .@placeholder(_'Passwort')
+                .@onChange(.password)
+            --
+        !>
+        --
+        button.{_'Einloggen'}.submit
+    /form
+/render
+
+/template
