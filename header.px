@@ -51,14 +51,15 @@ effect:
         button
             .@css({
                 background: white
+                text: black
             })
             .@click(clickAccount.set)
-            .@disabled(clickAccount.loading):
         --
-            {#disabled}.
+            {#click}.
                 ?.SVG.{'spin'}
-                :.SVG.{'reload'}
+                :.SVG.{'plus'}
             --
+            {clickAccount}
         /button
     /header
 /render
