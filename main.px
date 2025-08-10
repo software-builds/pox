@@ -5,13 +5,20 @@ template{
     x: BOOL
 }:
 
-div
-    {x}.&&.HEADER.{0, "headingText"}
+code:
+    logs.@state([
+        'Nice',
+        'Wie gut'
+    ])
+/code
+
+div:
+    {x}.&&.HEADER.{0, "headingText"}:
         h3.{"lustig"}
     /HEADER
     --
-    {x}.map[raw -> (
-        RAW
+    {logs}.map[item -> (
+        p.{item::message}
     )]
 /div
 

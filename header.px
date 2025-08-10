@@ -5,7 +5,7 @@ template.childs{
 }:
 
 code:
-    clickCount.@state{defaultCount}
+    clickCount.@state(defaultCount)
         .set: it.inc
         .effect
         .load
@@ -20,10 +20,10 @@ effect:
     --
 /effect
 
-/render
+/render:
     header.@class('flex jusitfy-content-center items-center', {
         'w-full': it.eq.0
-    })--
+    }):
         h1.{headingText}.@class('test')
         --
         nav:
@@ -37,7 +37,7 @@ effect:
                 background: white
             })
             .@click(clickAccount.set)
-            .@disabled(clickAccount.loading)
+            .@disabled(clickAccount.loading):
         --
             {#disabled}.
                 ?.SVG.{'spin'}
