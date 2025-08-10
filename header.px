@@ -6,7 +6,7 @@ template.childs{
 
 code:
     clickCount.@state{defaultCount}
-        .set: it++
+        .set: it.inc
         .effect
         .load
     --
@@ -15,13 +15,15 @@ code:
 effect:
     http{"https://xx:24344/data", (req, res)}
         .state('data')
-        .error(res.error)
+        .error(res::error)
         .async
     --
 /effect
 
 /render
-    header.@class('flex jusitfy-content-center items-center')
+    header.@class('flex jusitfy-content-center items-center', {
+        'w-full': it.eq.0
+    })--
         h1.{headingText}.@class('test')
         --
         nav:
@@ -30,7 +32,18 @@ effect:
             /ul
         /nav
         --
-        button.{clickAccount}.@click('state:clickAccount')
+        button
+            .@css({
+                background: white
+            })
+            .@click(clickAccount.set)
+            .@disabled(clickAccount.loading)
+        --
+            {#disabled}.
+                ?.SVG.{'spin'}
+                :.SVG.{'reload'}
+            --
+        /button
     /header
 /render
 
