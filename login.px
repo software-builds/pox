@@ -6,6 +6,9 @@ code:
         username: '',
         passwort: ''
     ])
+    --
+    loggedIn.@state(false)
+        .load
 /code
 
 effect:
@@ -13,6 +16,7 @@ effect:
         http{"https://xx:24344/login", (req, res)}
             .post
             .json
+            .load(loggedIn)
             .form(loginState)
             .error(res::error)
             .async
@@ -21,24 +25,29 @@ effect:
 /effect
 
 /render:
-    form.@onSubmit(login):
-        h1.{headingText}.@class('test')
-        --
-        ->loginState
-            input
-                .@name('username')
-                .@placeholder(_'Benutzername')
-                .@onChange(.username)
-            --
-            input
-                .@name('password')
-                .@placeholder(_'Passwort')
-                .@onChange(.password)
-            --
-        !>
-        --
-        button.{_'Einloggen'}.submit
-    /form
+    not.{loggedIn}
+        .?.
+            form.@onSubmit(login):
+                h1.{headingText}.@class('test')
+                --
+                ->loginState
+                    input
+                        .@name('username')
+                        .@placeholder(_'Benutzername')
+                        .@onChange(.username)
+                    --
+                    input
+                        .@name('password')
+                        .@placeholder(_'Passwort')
+                        .@onChange(.password)
+                    --
+                !>
+                --
+                button.{_'Einloggen'}.submit
+            /form
+        .:.
+            h1.{_'Eingeloggt"}.@class('test')
+    --
 /render
 
 /template
