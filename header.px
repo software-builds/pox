@@ -1,3 +1,5 @@
+@import(LOGIN)
+
 @name(HEADER)
 template.childs{
     defaultCount: NUM
@@ -43,6 +45,8 @@ effect:
                 ]
             /ul
         /nav
+        --
+        LOGIN
         --
         button
             .@css({
