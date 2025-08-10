@@ -1,0 +1,21 @@
+@import(HEADER)
+
+@name(MAIN)
+template{
+    x: BOOL
+}:
+
+div
+    {x}.&&.HEADER.{0, "headingText"}
+        h3.{"lustig"}
+    /HEADER
+    --
+    {x}.map[raw -> (
+        RAW
+    )]
+/div
+
+
+/template
+
+RUNNER::MAIN.{true}

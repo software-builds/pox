@@ -1,0 +1,37 @@
+@name(HEADER)
+template.childs{
+    defaultCount: NUM
+    headingText: TXT
+}:
+
+code:
+    clickCount.@state{defaultCount}
+        .set: it++
+        .effect
+        .load
+    --
+/code
+
+effect:
+    http{"https://xx:24344/data", (req, res)}
+        .state('data')
+        .error(res.error)
+        .async
+    --
+/effect
+
+/render
+    header.@class('flex jusitfy-content-center items-center')
+        h1.{headingText}.@class('test')
+        --
+        nav:
+            ul:
+                {menu}.map[item -> li.{item::text}]
+            /ul
+        /nav
+        --
+        button.{clickAccount}.@click('state:clickAccount')
+    /header
+/render
+
+/template
