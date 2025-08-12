@@ -1,67 +1,66 @@
-@import(LOGIN)
+@import(LOGIN)                                  // LOGIN-Komponente einbinden
 
-@name(HEADER)
-template.childs{
-    defaultCount: NUM
-    headingText: TXT
+@name(HEADER)                                   // Name der Komponente: HEADER
+template.childs{                                // Definiert optionale Kind-Parameter (Übergaben von außen)
+    defaultCount: NUM                           // Standardwert für Zähler (Zahl)
+    headingText: TXT                            // Überschrift (Text)
 }:
 
-code:
-    clickCount.@state(defaultCount)
-        .set: it.inc
+code:                                           // Start Code-Bereich
+    clickCount.@state(defaultCount)             // Zustand für Klickzähler mit Startwert
+        .set: it.inc                            // Funktion zum Erhöhen des Zählers
     --
-    menu.@state([
-        items: [
+    menu.@state([                               // Zustand für Navigationsmenü
+        items: [                                // Standardstruktur: Liste von Menüpunkten
             {
-                text: '',
-                link: ''
+                text: '',                       // Text des Menüpunkts
+                link: ''                        // Link des Menüpunkts
             }
         ]
-    ]).load('menu')
-/code
+    ]).load                                     // Definiert das der Zustand von einer HTTP-Antwort gefüllt wird
+/code                                           // Ende Code-Bereich
 
-effect:
-    menu:
-        http{"https://xx:24344/menu", (req, res)}
-            .state(menu)
-            .error(res::error)
-            .async
+effect:                                         // Start Effekt-Bereich
+    menu:                                       // Effekt zum Laden des Menüs
+        http{"https://xx:24344/menu", (req, res)} // Anfrage an Menü-API
+            .load(menu)                         // Antwort in "menu"-Status speichern
+            .json                               // Daten im JSON-Format erhalten
         --
-    /menu
-/effect
+    /menu                                       // Ende Menü-Effekt
+/effect                                         // Ende Effekt-Bereich
 
-/render:
-    header.@class('flex jusitfy-content-center items-center', {
-        'w-full': it.eq.0
+/render:                                        // Start UI-Bereich
+    header.@class('flex jusitfy-content-center items-center', { // Header mit CSS-Klassen
+        'w-full': it.eq.0                        // Wenn Bedingung erfüllt: volle Breite (i == 0)
     }):
-        h1.{headingText}.@class('test')
+        h1.{headingText}.@class('test')          // Überschrift mit Klasse "test"
         --
-        nav:
-            ul:
-                {menu}.map[item ->
-                    li:
-                        a.{item::text}.@link(item::link)
-                    /li
+        nav:                                     // Navigationsbereich
+            ul:                                  // Untergeordnete Liste der Menüeinträge
+                {menu}.map[item ->               // Menü-Daten durchlaufen
+                    li:                          // Listenpunkt
+                        a.{item::text}.@link(item::link) // Link mit Text und URL
+                    /li                          // Ende Listenpunkt
                 ]
-            /ul
-        /nav
+            /ul                                  // Ende Untergeordnete Liste
+        /nav                                     // Ende Navigationsbereich
         --
-        LOGIN
+        LOGIN                                    // Eingebundene LOGIN-Komponente
         --
-        button
-            .@css({
-                background: white
-                text: black
+        button                                   // Button-Bereich
+            .@css({                              // Inline-CSS
+                background: white                // Hintergrundfarbe Weiß
+                text: black                      // Textfarbe Schwarz
             })
-            .@click(clickAccount.set)
+            .@click(clickAccount.set)            // Klick-Event: Zähler setzen/ändern
         --
-            {#click}.
-                ?.SVG.{'spin'}
-                :.SVG.{'plus'}
+            {#click}.                            // Wenn geklickt...
+                ?.SVG.{'spin'}                   // ...zeige drehendes Icon
+                :.SVG.{'plus'}                   // ...sonst Plus-Icon
             --
-            {clickAccount}
+            {clickAccount}                       // Anzeige des Klickzählers
         /button
     /header
-/render
+/render                                         // Ende UI-Bereich
 
-/template
+/template                                       // Ende Template-Definition

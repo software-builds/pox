@@ -1,54 +1,52 @@
-@name(LOGIN)
-template:
+@name(LOGIN)                                // Name der Komponente: LOGIN
+template:                                   // Start der Template-Definition
 
-code:
-    loginState.@state([
-        username: '',
-        passwort: ''
+code:                                       // Hier beginnt der Code-Bereich
+    loginState.@state([                     // Zustand für die Login-Daten anlegen
+        username: '',                       // Benutzername, am Anfang leer
+        password: ''                        // Passwort, am Anfang leer
     ])
     --
-    loggedIn.@state(false)
-        .load
-/code
+    loggedIn.@state(false)                  // Zustand: Ist der Nutzer eingeloggt? (false = nein)
+        .load                               // Definiert das der Zustand von einer HTTP-Antwort gefüllt wird
+/code                                       // Ende des Code-Bereichs
 
-effect:
-    login:
-        http{"https://xx:24344/login", (req, res)}
-            .post
-            .json
-            .load(loggedIn)
-            .form(loginState)
-            .error(res::error)
-            .async
+effect:                                     // Bereich für Funktionen/Aktionen
+    login:                                  // Login-Aktion starten
+        http{"https://xx:24344/login", (req, res)}  // HTTP Login Anfrage an das Backend
+            .post                           // Daten als POST senden
+            .json                           // Daten im JSON-Format senden
+            .load(loggedIn)                 // Antwort in "loggedIn"-Status speichern
+            .form(loginState)               // Formular-Daten aus loginState nutzen
         --
-    /login
-/effect
+    /login                                  // Ende der Login-Aktion
+/effect                                     // Ende des Funktionen/Aktionen-Bereichs
 
-/render:
-    not.{loggedIn}
-        .?.
-            form.@onSubmit(login):
-                h1.{headingText}.@class('test')
+/render:                                    // Bereich für das Markdown
+    not.{loggedIn}                          // Wenn der Nutzer NICHT eingeloggt ist...
+        .?.                                 // ...dann Formular anzeigen
+            form.@onSubmit(login):          // Formular, das bei Absenden Login-Aktion ausführt
+                h1.{headingText}.@class('test') // Überschrift mit CSS-Klasse "test"
                 --
-                ->loginState
-                    input
-                        .@name('username')
-                        .@placeholder(_'Benutzername')
-                        .@onChange(.username)
+                ->loginState                // Verbindung der Eingabefelder mit loginState
+                    input                   // Eingabefeld für Benutzername
+                        .@name('username')  // Name des Feldes: username
+                        .@placeholder(_'Benutzername') // Platzhalter-Text
+                        .@onChange(.username) // Aktualisiert loginState.username
                     --
-                    input
-                        .@name('password')
-                        .@placeholder(_'Passwort')
-                        .@onChange(.password)
+                    input                   // Eingabefeld für Passwort
+                        .@name('password')  // Name des Feldes: password
+                        .@placeholder(_'Passwort') // Platzhalter-Text
+                        .@onChange(.password) // Aktualisiert loginState.password
                     --
-                !>
+                !>                            // Ende der loginState-gebundenen Felder
                 --
-                button.{_'Einloggen'}.submit
-            /form
-        .:.
-            h1.{_'Eingeloggt"}.@class('test')
+                button.{_'Einloggen'}.submit  // Button zum Einloggen
+            /form                             // Ende des Formulars
+        .:.                                   // ...Eingeloggt anzeigen
+            h1.{_'Eingeloggt"}.@class('test') // Überschrift: "Eingeloggt"
         --
     --
-/render
+/render                                     // Ende des UI-Bereichs
 
-/template
+/template                                   // Ende der Template-Definition

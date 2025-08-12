@@ -1,28 +1,29 @@
-@import(HEADER)
+@import(HEADER)                           // HEADER-Komponente einbinden
 
-@name(MAIN)
-template{
-    x: BOOL
+@name(MAIN)                               // Name der Komponente: MAIN
+template{                                 // Start der Template-Definition
+    x: BOOL                               // Eingabe-Parameter: x (Wahr/Falsch)
 }:
 
-code:
-    logs.@state([
-        'Nice',
-        'Wie gut'
+code:                                     // Start Code-Bereich
+    logs.@state([                         // Zustand "logs" mit Standardwert
+        'log-0',                          // Erste Log-Nachricht
+        'log-1'                           // Zweite Log-Nachricht
     ])
-/code
+/code                                     // Ende Code-Bereich
 
-div:
-    {x}.&&.HEADER.{0, "headingText"}:
-        h3.{_"lustig"}
-    /HEADER
-    --
-    {logs}.map[item -> (
-        p.{item::message}
-    )]
-/div
+render:                                   // Start UI-Bereich
+    div:                                  // Start der Hauptansicht
+        {x}.&&.HEADER.{0, _"Ein Text"}:   // Wenn x wahr, HEADER-Komponente mit Werten aufrufen
+            h3.{_"lustig"}                // Untertitel im Header (Child)
+        /HEADER                           // Ende HEADER-Aufruf
+        --
+        {logs}.map[item -> (              // Jeden Eintrag in logs durchgehen
+            p.{item::message}             // Paragraph mit Log-Nachricht (item.message)
+        )]
+    /div                                  // Ende der Ansicht
+/render                                   // Ende UI-Bereich
 
+/template                                 // Ende der Template-Definition
 
-/template
-
-RUNNER::MAIN.{true}
+RUNNER::MAIN.{true}                       // MAIN-Komponente starten mit x = true
